@@ -9,37 +9,41 @@ run("Enhance Contrast", "saturated=0.35");
 Stack.setChannel(2);
 run("Enhance Contrast", "saturated=0.35");
 
-// Optional: set projection mode if needed
+// Optional set projection mode if needed
 Property.set("CompositeProjection", "Sum");
 
 // Initial fixed transformations
 run("Rotate 90 Degrees Left");
 run("Flip Horizontally");
 
-// Loop until user confirms final rotation
-finalized = false;
+// Ask user if they need further rotation
+if (getBoolean("Do you need to rotate the image further?")) {
+    
+    // Loop until user confirms final rotation
+    finalized = false;
 
-while (!finalized) {
+    while (!finalized) {
 
-    // Ask user for rotation angle
-    Dialog.create("Fine Rotation");
-    Dialog.addNumber("Enter rotation angle (degrees):", 0);
-    Dialog.show();
+        // Ask user for rotation angle
+        Dialog.create("Fine Rotation");
+        Dialog.addNumber("Enter rotation angle (degrees)", 0);
+        Dialog.show();
 
-    angle = Dialog.getNumber();
+        angle = Dialog.getNumber();
 
-    // Apply rotation
-    run("Rotate...", "angle=" + angle + " grid=1 interpolation=Bilinear enlarge");
+        // Apply rotation
+        run("Rotate...", "angle=" + angle + " grid=1 interpolation=Bilinear enlarge");
 
-    // Ask user to confirm
-    Dialog.create("Confirm Rotation");
-    Dialog.addMessage("Is this rotation final?");
-    Dialog.addChoice("Confirm:", newArray("No, adjust again", "Yes, finalize"), "No, adjust again");
-    Dialog.show();
+        // Ask user to confirm
+        Dialog.create("Confirm Rotation");
+        Dialog.addMessage("Is this rotation final?");
+        Dialog.addChoice("Confirm", newArray("No, adjust again", "Yes, finalize"), "No, adjust again");
+        Dialog.show();
 
-    choice = Dialog.getChoice();
+        choice = Dialog.getChoice();
 
-    if (choice == "Yes, finalize") {
-        finalized = true;
+        if (choice == "Yes, finalize") {
+            finalized = true;
+        }
     }
 }
